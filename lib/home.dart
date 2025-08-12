@@ -1,167 +1,40 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class BikeShoppingScreen extends StatelessWidget {
   const BikeShoppingScreen({Key? key}) : super(key: key);
 
+  static const Color backgroundColor = Color(0xFF1E1E2E);
+  static const Color cardDark = Color(0xFF222834);
+  static const Color gradientStart = Color(0xFF34C8E8);
+  static const Color gradientEnd = Color(0xFF4E4AF2);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF1E1E2E),
+      backgroundColor: backgroundColor,
       body: SafeArea(
         child: Column(
           children: [
-            // Header
-            Padding(
-              padding: const EdgeInsets.all(20.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const Text(
-                    'Choose Your Bike',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  Container(
-                    padding: const EdgeInsets.all(8),
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                        colors: [Color(0xFF34C8E8), Color(0xFF4E4AF2)],
-                      ),
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: const Icon(
-                      Icons.search,
-                      color: Colors.white,
-                      size: 30,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-
+            const _Header(),
             Expanded(
               child: SingleChildScrollView(
-                padding: const EdgeInsets.symmetric(horizontal: 15),
+                padding: EdgeInsets.symmetric(horizontal: 15.w),
                 child: Container(
-
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                     image: DecorationImage(
-                      image: AssetImage('assets/images/BG.png',),
+                      image: AssetImage('assets/images/BG.png'),
+                      fit: BoxFit.cover,
                     ),
                   ),
                   child: Column(
                     children: [
-                      SizedBox(height: 10),
-                      // Featured E-bike Card
-                      // Bike Image
-                      ClipRRect(
-                        borderRadius: BorderRadiusGeometry.circular(20),
-                        child: Stack(
-                          alignment: Alignment.center,
-                          children: [
-                            Container(
-                              child: Image.asset(
-                                'assets/images/TopCard.png',
-                                // Replace with your asset
-                                width: double.infinity,
-                                height: 500,
-                                fit: BoxFit.fitHeight,
-                              ),
-                              width: double.infinity,
-                              height: MediaQuery.of(context).size.height * 0.4,
-                            ),
-                          ],
-                        ),
-                      ),
-                      // Filter Chips
-                      Row(
-                        children: [
-                          _buildFilterChip(
-                            true,
-                            'All',
-                            Image.asset('assets/images/Bicycle.png', width: 0),
-                          ),
-                          const SizedBox(width: 12),
-                          _buildFilterChip(
-                            false,
-                            '',
-                            Image.asset('assets/images/batt.png'),
-                          ),
-                          const SizedBox(width: 12, height: 30),
-                          _buildFilterChip(
-                            false,
-                            '',
-                            Image.asset('assets/images/batt.png'),
-                          ),
-                          const SizedBox(width: 12),
-                          _buildFilterChip(
-                            false,
-                            '',
-                            Image.asset('assets/images/batt.png'),
-                          ),
-                          const SizedBox(width: 12),
-                          _buildFilterChip(
-                            false,
-                            '',
-                            Image.asset('assets/images/batt.png'),
-                          ),
-                        ],
-                      ),
-
-                      const SizedBox(height: 20),
-
-                      // Products Grid
-                      GridView.count(
-                        shrinkWrap: true,
-                        physics: const NeverScrollableScrollPhysics(),
-                        crossAxisCount: 2,
-                        childAspectRatio: 0.8,
-                        crossAxisSpacing: 15,
-                        mainAxisSpacing: 15,
-                        children: [
-                          _buildProductCard(
-                              'Road Bike',
-                              'PEUGEOT - LR01',
-                              '\$ 1,999.99',
-                              'assets/road_bike.png',
-                              Color(0xFF222834),
-                              Image.asset('assets/images/bike.png'),
-                              true
-                          ),
-                          _buildProductCard(
-                              'Road Helmet',
-                              'SMITH - Trade',
-                              '\$ 120',
-                              'assets/helmet.png',
-                              const Color(0xFF222834),
-                              Image.asset('assets/images/Image.png'),
-                              false
-                          ),
-                          _buildProductCard(
-                              'Mountain Bike',
-                              'TREK - X1',
-                              '\$ 2,499.99',
-                              'assets/mountain_bike.png',
-                              const Color(0xFF222834),
-                              Image.asset('assets/images/bike.png'),
-                              true
-                          ),
-                          _buildProductCard(
-                              'Bike Accessories',
-                              'Various Items',
-                              '\$ 99.99',
-                              'assets/accessories.png',
-                              const Color(0xFF222834),
-                              Image.asset('assets/images/bike.png'),
-                              false
-                          ),
-                        ],
-                      ),
+                      SizedBox(height: 10.h),
+                      const _FeaturedBikeCard(),
+                      SizedBox(height: 20.h),
+                      const _FilterChipsRow(),
+                      SizedBox(height: 20.h),
+                      _ProductsGrid(),
                     ],
                   ),
                 ),
@@ -170,144 +43,246 @@ class BikeShoppingScreen extends StatelessWidget {
           ],
         ),
       ),
-      bottomNavigationBar: Container(
-        height: 80,
-        decoration: const BoxDecoration(
-          color: Color(0xFF1E1E2E),
-          border: Border(top: BorderSide(color: Color(0xFF2D2D4A), width: 0.5)),
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            _buildBottomNavItem(Icons.directions_bike, true),
-            _buildBottomNavItem(Icons.map_outlined, false),
-            _buildBottomNavItem(Icons.shopping_cart_outlined, false),
-            _buildBottomNavItem(Icons.person_outline, false),
-            _buildBottomNavItem(Icons.description_outlined, false),
-          ],
-        ),
-      ),
+      bottomNavigationBar: const _BottomNavBar(),
     );
   }
+}
 
-  Widget _buildFilterChip(bool isSelected, String? label, Widget icon) {
-    return Stack(
-      alignment: Alignment.center,
-      children: [
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 20),
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topRight,
-              end: Alignment.bottomLeft,
-              colors: isSelected
-                  ? [Color(0xFF4A9EFF), Color(0xFF4E4AF2)]
-                  : [Color(0xFF222834), Color(0xFF353F54)],
-            ),
-            borderRadius: BorderRadius.circular(20),
-          ),
-          child: Text(
-            label!,
+class _Header extends StatelessWidget {
+  const _Header();
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.all(20.w),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            'Choose Your Bike',
             style: TextStyle(
               color: Colors.white,
-              fontSize: 14,
-              fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
+              fontSize: 24.sp,
+              fontWeight: FontWeight.bold,
             ),
           ),
-        ),
-        icon,
-      ],
-    );
-  }
-
-  Widget _buildProductCard(
-      String category,
-      String title,
-      String price,
-      String imagePath,
-      Color cardColor,
-      Widget image,
-      bool check,
-      ) {
-    return Container(
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [cardColor, cardColor.withOpacity(0.7)],
-        ),
-        borderRadius: BorderRadius.circular(16),
-      ),
-      child: Stack(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(20),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Spacer(),
-                Text(
-                  category,
-                  style: const TextStyle(color: Colors.white70, fontSize: 12),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  title,
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  price,
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 14,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          // Heart icon
-          Positioned(
-            top: 20,
-            right: 12,
-            child:  Icon(Icons.favorite_border,  color: check ? Colors.white70 : Colors.blue, size: 20),
-          ),
-          // Product image placeholder
-          Positioned(
-            right: 20,
-            top: 20,
-            child: Container(
-              width: 150,
-              height: 150,
-              decoration: BoxDecoration(
-                color: Colors.transparent,
-                borderRadius: BorderRadius.circular(8),
+          Container(
+            padding: EdgeInsets.all(8.w),
+            decoration: BoxDecoration(
+              gradient: const LinearGradient(
+                colors: [BikeShoppingScreen.gradientStart, BikeShoppingScreen.gradientEnd],
               ),
-              child: image,
+              borderRadius: BorderRadius.circular(8.r),
             ),
+            child: Icon(Icons.search, color: Colors.white, size: 30.sp),
           ),
         ],
       ),
     );
   }
+}
 
-  Widget _buildBottomNavItem(IconData icon, bool isSelected) {
+class _FeaturedBikeCard extends StatelessWidget {
+  const _FeaturedBikeCard();
+
+  @override
+  Widget build(BuildContext context) {
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(20.r),
+      child: Image.asset(
+        'assets/images/TopCard.png',
+        width: double.infinity,
+        height: 300.h,
+        fit: BoxFit.fitHeight,
+      ),
+    );
+  }
+}
+
+class _FilterChipsRow extends StatelessWidget {
+  const _FilterChipsRow();
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: const [
+        _FilterChip(isSelected: true, label: '', iconPath: 'assets/images/Bicycle.png'),
+        SizedBox(width: 12),
+        _FilterChip(isSelected: false, label: '', iconPath: 'assets/images/batt.png'),
+        SizedBox(width: 12),
+        _FilterChip(isSelected: false, label: '', iconPath: 'assets/images/batt.png'),
+        SizedBox(width: 12),
+        _FilterChip(isSelected: false, label: '', iconPath: 'assets/images/batt.png'),
+        SizedBox(width: 12),
+        _FilterChip(isSelected: false, label: '', iconPath: 'assets/images/batt.png'),
+      ],
+    );
+  }
+}
+
+class _FilterChip extends StatelessWidget {
+  final bool isSelected;
+  final String label;
+  final String iconPath;
+
+  const _FilterChip({
+    required this.isSelected,
+    required this.label,
+    required this.iconPath,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      alignment: Alignment.center,
+      children: [
+        Container(
+          padding: EdgeInsets.symmetric(horizontal: 30.w, vertical: 28.h),
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: isSelected
+                  ? [const Color(0xFF4A9EFF), const Color(0xFF4E4AF2)]
+                  : [const Color(0xFF222834), const Color(0xFF353F54)],
+            ),
+            borderRadius: BorderRadius.circular(20.r),
+          ),
+          child: Text(
+            label,
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 14.sp,
+              fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
+            ),
+          ),
+        ),
+        Image.asset(iconPath, width: 35.w, height: 35.h,
+        fit: BoxFit.cover,),
+      ],
+    );
+  }
+}
+
+class _ProductsGrid extends StatelessWidget {
+  final products = const [
+    Product('Road Bike', 'PEUGEOT - LR01', '\$ 1,999.99', 'assets/images/bike.png', true),
+    Product('Road Helmet', 'SMITH - Trade', '\$ 120', 'assets/images/Image.png', false),
+    Product('Mountain Bike', 'TREK - X1', '\$ 2,499.99', 'assets/images/bike.png', true),
+    Product('Bike Accessories', 'Various Items', '\$ 99.99', 'assets/images/bike.png', false),
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return GridView.builder(
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      itemCount: products.length,
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 2,
+        childAspectRatio: 0.8,
+        crossAxisSpacing: 15.w,
+        mainAxisSpacing: 15.h,
+      ),
+      itemBuilder: (context, index) => _ProductCard(product: products[index]),
+    );
+  }
+}
+
+class Product {
+  final String category;
+  final String title;
+  final String price;
+  final String imagePath;
+  final bool isFavorite;
+
+  const Product(this.category, this.title, this.price, this.imagePath, this.isFavorite);
+}
+
+class _ProductCard extends StatelessWidget {
+  final Product product;
+
+  const _ProductCard({required this.product});
+
+  @override
+  Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: [BikeShoppingScreen.cardDark, BikeShoppingScreen.cardDark.withOpacity(0.7)],
+        ),
+        borderRadius: BorderRadius.circular(16.r),
+      ),
+      child: Stack(
+        children: [
+          Padding(
+            padding: EdgeInsets.all(15.w),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Spacer(),
+                Text(product.category, style: TextStyle(color: Colors.white70, fontSize: 12.sp)),
+                SizedBox(height: 4.h),
+                Text(product.title, style: TextStyle(color: Colors.white, fontSize: 16.sp, fontWeight: FontWeight.bold)),
+                SizedBox(height: 4.h),
+                Text(product.price, style: TextStyle(color: Colors.white, fontSize: 14.sp, fontWeight: FontWeight.w600)),
+              ],
+            ),
+          ),
+          Positioned(
+            top: 20.h,
+            right: 12.w,
+            child: Icon(Icons.favorite_border, color: product.isFavorite ? Colors.white70 : Colors.blue, size: 20.sp),
+          ),
+          Positioned(
+            right: 15.w,
+            top: 10.h,
+            child: Image.asset(product.imagePath, width: 150.w, height: 150.h),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _BottomNavBar extends StatelessWidget {
+  const _BottomNavBar();
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 80.h,
+      decoration: const BoxDecoration(
+        color: BikeShoppingScreen.backgroundColor,
+        border: Border(top: BorderSide(color: Color(0xFF2D2D4A), width: 0.5)),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: const [
+          _BottomNavItem(icon: Icons.directions_bike, isSelected: true),
+          _BottomNavItem(icon: Icons.map_outlined, isSelected: false),
+          _BottomNavItem(icon: Icons.shopping_cart_outlined, isSelected: false),
+          _BottomNavItem(icon: Icons.person_outline, isSelected: false),
+          _BottomNavItem(icon: Icons.description_outlined, isSelected: false),
+        ],
+      ),
+    );
+  }
+}
+
+class _BottomNavItem extends StatelessWidget {
+  final IconData icon;
+  final bool isSelected;
+
+  const _BottomNavItem({required this.icon, required this.isSelected});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.all(12.w),
       decoration: BoxDecoration(
         color: isSelected ? const Color(0xFF4A9EFF) : Colors.transparent,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(12.r),
       ),
-      child: Icon(
-        icon,
-        color: isSelected ? Colors.white : Colors.white54,
-        size: 24,
-      ),
+      child: Icon(icon, color: isSelected ? Colors.white : Colors.white54, size: 24.sp),
     );
   }
 }
