@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'home.dart'; // adjust path if needed
+import 'features/bike_shop/presentation/pages/bike_catalog_page.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -17,7 +17,7 @@ class MyApp extends StatelessWidget {
       minTextAdapt: true,
       splitScreenMode: true,
       // pass your top-level screen as `child`
-      child: const BikeShoppingScreen(),
+      child: const BikeCatalogPage(),
       builder: (context, child) {
         // return MaterialApp and use `child` as the home
         return MaterialApp(
